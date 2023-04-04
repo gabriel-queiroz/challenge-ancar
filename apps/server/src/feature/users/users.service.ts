@@ -17,4 +17,13 @@ export class UsersService {
       cpf: '12345678901',
     });
   }
+  async findByCpf(cpf: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: {
+        attribute: {
+          cpf,
+        },
+      },
+    });
+  }
 }
