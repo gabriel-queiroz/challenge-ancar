@@ -5,7 +5,11 @@ import {
   PrimaryKey,
   Default,
   Sequelize,
+  BeforeCreate,
 } from 'sequelize-typescript';
+import * as bcrypt from 'bcrypt';
+
+const SALT_ROUNDS = 8;
 
 @Table({
   tableName: 'users',
@@ -24,4 +28,16 @@ export class User extends Model {
 
   @Column
   cpf: string;
+
+  @BeforeCreate
+  static cryptPassword(user: User) {
+    user.password = bcrypt.hashSync(
+      user.password,
+      bcrypt.genSaltSync(SALT_ROUNDS),
+    );
+  }
+
+  validPassword(password: string) {
+    return bcrypt.compareSync(password, this.password);
+  }
 }
