@@ -1,0 +1,14 @@
+{
+  "name": "challenge-ancar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:gabriel-queiroz/challenge-ancar.git",
+  "author": "gabriel-queiroz <gabrielqueirozzn@gmail.com>",
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  }
+}
