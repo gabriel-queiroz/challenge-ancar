@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { User } from './user.entity';
 import { UsersDto } from './dto/response/users.dto';
 import { UserRequestDto } from './dto/request/user.dto';
+import { UserUpdateRequestDto } from './dto/request/update.dto';
 
 @Injectable()
 export class UsersService {
@@ -26,5 +27,28 @@ export class UsersService {
         cpf,
       },
     });
+  }
+  async deleteById(id: string): Promise<void> {
+    try {
+      await this.usersRepository.destroy({
+        where: { id },
+      });
+    } catch (error) {
+      throw new HttpException('not_found', HttpStatus.UNAUTHORIZED);
+    }
+  }
+  async updateById(
+    id: string,
+    userUpdateRequestDto: UserUpdateRequestDto,
+  ): Promise<void> {
+    try {
+      await this.usersRepository.update(userUpdateRequestDto, {
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new HttpException('not_found', HttpStatus.UNAUTHORIZED);
+    }
   }
 }
