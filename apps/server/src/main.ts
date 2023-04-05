@@ -11,6 +11,7 @@ async function bootstrap() {
     .setDescription(
       'this documentation describe services system of questionnaries',
     )
+    .addBearerAuth()
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);

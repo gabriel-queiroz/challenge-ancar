@@ -1,4 +1,4 @@
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { UserUpdateRequestDto } from './dto/request/update.dto';
 import { UserRequestDto } from './dto/request/user.dto';
 import { UsersDto } from './dto/response/users.dto';
@@ -13,6 +13,7 @@ import {
   Put,
 } from '@nestjs/common';
 
+@ApiBearerAuth()
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
