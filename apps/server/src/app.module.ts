@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { UsersModule } from './feature/users/users.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './feature/users/user.entity';
+import { AuthModule } from './feature/auth/auth.module';
+import { APP_PIPE } from '@nestjs/core';
+import { ValidationPipe } from './feature/auth/validation.pipe';
 @Module({
   imports: [
     UsersModule,
@@ -20,8 +23,15 @@ import { User } from './feature/users/user.entity';
         timestamps: false,
       },
     }),
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {}

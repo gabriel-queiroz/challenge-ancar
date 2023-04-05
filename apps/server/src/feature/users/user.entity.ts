@@ -35,9 +35,12 @@ export class User extends Model {
       user.password,
       bcrypt.genSaltSync(SALT_ROUNDS),
     );
+    console.log(user.password);
+    return user;
   }
 
   validPassword(password: string) {
+    console.log(this.password);
     return bcrypt.compareSync(password, this.password);
   }
 }
