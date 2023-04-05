@@ -1,3 +1,4 @@
+import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { UserUpdateRequestDto } from './dto/request/update.dto';
 import { UserRequestDto } from './dto/request/user.dto';
 import { UsersDto } from './dto/response/users.dto';
@@ -12,6 +13,7 @@ import {
   Put,
 } from '@nestjs/common';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -26,12 +28,18 @@ export class UsersController {
     return this.usersService.create(userRequestDto);
   }
 
+  @ApiCreatedResponse({
+    description: 'The end-point no return anything on body',
+  })
   @Delete(':id')
   async deleteById(@Param('id') id: string): Promise<void> {
     return this.usersService.deleteById(id);
   }
 
   @Put(':id')
+  @ApiCreatedResponse({
+    description: 'The end-point no return anything on body',
+  })
   async updateById(
     @Param('id') id: string,
     @Body() userUpdateRequestDto: UserUpdateRequestDto,
