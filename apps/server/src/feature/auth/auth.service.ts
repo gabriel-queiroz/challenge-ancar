@@ -14,7 +14,7 @@ export class AuthService {
   async signIn(signInRequestDto: SignInRequestDto): Promise<SignInResponseDto> {
     try {
       const user = await this.usersService.findByCpf(signInRequestDto.cpf);
-      console.log(user.password);
+      console.log(user);
       console.log(signInRequestDto.password);
       console.log(user.validPassword(signInRequestDto.password));
       if (!!user && user.validPassword(signInRequestDto.password)) {
