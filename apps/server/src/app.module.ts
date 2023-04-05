@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 
 import { UsersModule } from './feature/users/users.module';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -25,9 +23,8 @@ import { ValidationPipe } from './feature/auth/validation.pipe';
     }),
     AuthModule,
   ],
-  controllers: [AppController],
+
   providers: [
-    AppService,
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,
