@@ -28,6 +28,10 @@ export class UsersService {
       },
     });
   }
+
+  async findOne(id: string): Promise<User> {
+    return this.usersRepository.findByPk(id);
+  }
   async deleteById(id: string): Promise<void> {
     try {
       await this.usersRepository.destroy({
