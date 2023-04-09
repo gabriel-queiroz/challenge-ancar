@@ -30,9 +30,40 @@ module.exports = {
         allowNull: false,
       },
     });
+
+    await queryInterface.addConstraint('questionnaire_user', {
+      type: 'foreign key',
+      name: 'fk_questionnaire_user',
+      fields: ['user_id'],
+      references: {
+        table: 'users',
+        field: 'id',
+      },
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
+    });
+    await queryInterface.addConstraint('questionnaire_user', {
+      type: 'foreign key',
+      name: 'fk_user_questionnaire',
+      fields: ['questionnaire_id'],
+      references: {
+        table: 'questionnaires',
+        field: 'id',
+      },
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
+    });
   },
 
   async down(queryInterface, Sequelize) {
+    await queryInterface.removeConstraint(
+      'questionnaire_user',
+      'fk_questionnaire_user',
+    );
+    await queryInterface.removeConstraint(
+      'questionnaire_user',
+      'fk_user_questionnaire',
+    );
     return queryInterface.dropTable('questionnaire_user');
   },
 };

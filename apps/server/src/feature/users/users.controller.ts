@@ -12,6 +12,7 @@ import {
   Param,
   Put,
 } from '@nestjs/common';
+import { Public } from '../auth/public.decorator';
 
 @ApiBearerAuth()
 @ApiTags('users')

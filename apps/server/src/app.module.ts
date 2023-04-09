@@ -20,7 +20,6 @@ import { Questionnaire } from './feature/questionnaires/questionnaire.entity';
       password: 'postgres',
       database: 'ancar',
       models: [User, Questionnaire],
-      quoteIdentifiers: false,
       define: {
         timestamps: false,
       },
