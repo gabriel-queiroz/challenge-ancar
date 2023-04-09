@@ -3,6 +3,7 @@ import { QuestionRequestDto } from '../request/question.dto';
 import { QuestionResponseDto } from './question.dto';
 
 export class QuestionnaireResponseDto {
+  id: string;
   name: string;
 
   description: string;
@@ -14,6 +15,7 @@ export class QuestionnaireResponseDto {
 
   static fromEntity(questionnaire: Questionnaire): QuestionnaireResponseDto {
     const questionnaireDto = new QuestionnaireResponseDto();
+    questionnaireDto.id = questionnaire.id;
     questionnaireDto.name = questionnaire.name;
     questionnaireDto.description = questionnaire.description;
     questionnaireDto.date = questionnaire.date;

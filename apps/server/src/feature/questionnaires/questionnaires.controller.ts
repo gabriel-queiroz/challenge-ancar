@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { QuestionnaireRequestDto } from './dto/request/questionnaire.dto';
 import { QuestionnairesService } from './questionnaires.service';
@@ -28,5 +36,9 @@ export class QuestionnairesController {
     } catch (error) {
       console.log(error);
     }
+  }
+  @Delete(':id')
+  deleteById(@Param('id') id: string): Promise<void> {
+    return this.questionnairesService.deleteById(id);
   }
 }

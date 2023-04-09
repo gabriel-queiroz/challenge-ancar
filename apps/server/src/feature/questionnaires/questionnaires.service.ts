@@ -24,6 +24,17 @@ export class QuestionnairesService {
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async deleteById(id: string): Promise<void> {
+    try {
+      await this.questionnaireRepository.destroy({
+        where: { id },
+      });
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async create(
     questionnaireRequestDto: QuestionnaireRequestDto,
     current_user_id: string,
