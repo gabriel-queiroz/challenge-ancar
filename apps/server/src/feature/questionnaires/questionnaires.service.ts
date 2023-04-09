@@ -3,6 +3,7 @@ import { Questionnaire } from './entity/questionnaire.entity';
 import { QuestionnaireRequestDto } from './dto/request/questionnaire.dto';
 import { UsersService } from '../users/users.service';
 import { Question } from './entity/question.entity';
+import { QuestionnaireResponseDto } from './dto/response/questionnaire.dto';
 
 @Injectable()
 export class QuestionnairesService {
@@ -13,10 +14,15 @@ export class QuestionnairesService {
     private questionRepository: typeof Question,
     private usersService: UsersService,
   ) {}
-  async getAll() {
-    return this.questionnaireRepository.findAll({
-      include: [this.questionRepository],
-    });
+  async getAll(): Promise<QuestionnaireResponseDto[]> {
+    try {
+      const questionnaires = await this.questionnaireRepository.findAll({
+        include: [this.questionRepository],
+      });
+      return QuestionnaireResponseDto.fromEntityList(questionnaires);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
   async create(
     questionnaireRequestDto: QuestionnaireRequestDto,
@@ -36,11 +42,10 @@ export class QuestionnairesService {
           include: [this.questionRepository],
         },
       );
-
       questionnaire.user = user;
       await questionnaire.save();
     } catch (error) {
-      console.log(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 }

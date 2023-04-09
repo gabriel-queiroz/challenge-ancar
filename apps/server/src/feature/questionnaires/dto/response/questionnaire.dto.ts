@@ -1,4 +1,6 @@
 import { Questionnaire } from '../../entity/questionnaire.entity';
+import { QuestionRequestDto } from '../request/question.dto';
+import { QuestionResponseDto } from './question.dto';
 
 export class QuestionnaireResponseDto {
   name: string;
@@ -6,18 +8,26 @@ export class QuestionnaireResponseDto {
   description: string;
   date: Date;
 
-  creator_user_id: number;
+  creator_user_id: string;
 
-  static fromEntity(questionnaire: Questionnaire) {
+  questions: QuestionRequestDto[];
+
+  static fromEntity(questionnaire: Questionnaire): QuestionnaireResponseDto {
     const questionnaireDto = new QuestionnaireResponseDto();
     questionnaireDto.name = questionnaire.name;
     questionnaireDto.description = questionnaire.description;
     questionnaireDto.date = questionnaire.date;
-    questionnaire.creator_user_id = questionnaire.creator_user_id;
+    questionnaireDto.creator_user_id = questionnaire.creator_user_id;
+    questionnaireDto.questions = QuestionResponseDto.fromEntityList(
+      questionnaire.questions,
+    );
+    return questionnaireDto;
   }
-  static fromEntityList(questionnaires: Questionnaire[]) {
-    return questionnaires.map((quest) =>
-      QuestionnaireResponseDto.fromEntity(quest),
+  static fromEntityList(
+    questionnaires: Questionnaire[],
+  ): QuestionnaireResponseDto[] {
+    return questionnaires.map((questionnaire) =>
+      QuestionnaireResponseDto.fromEntity(questionnaire),
     );
   }
 }

@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { QuestionnaireRequestDto } from './dto/request/questionnaire.dto';
 import { QuestionnairesService } from './questionnaires.service';
+import { QuestionnaireResponseDto } from './dto/response/questionnaire.dto';
 
 @ApiBearerAuth()
 @ApiTags('questionnaires')
@@ -10,7 +11,7 @@ export class QuestionnairesController {
   constructor(private questionnairesService: QuestionnairesService) {}
 
   @Get()
-  async getAll() {
+  async getAll(): Promise<QuestionnaireResponseDto[]> {
     return this.questionnairesService.getAll();
   }
 
