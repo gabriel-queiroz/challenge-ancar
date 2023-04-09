@@ -7,7 +7,8 @@ import { AuthModule } from './feature/auth/auth.module';
 import { APP_PIPE } from '@nestjs/core';
 import { ValidationPipe } from './feature/auth/validation.pipe';
 import { QuestionnairesModule } from './feature/questionnaires/questionnaires.module';
-import { Questionnaire } from './feature/questionnaires/questionnaire.entity';
+import { Questionnaire } from './feature/questionnaires/entity/questionnaire.entity';
+import { Question } from './feature/questionnaires/entity/question.entity';
 @Module({
   imports: [
     UsersModule,
@@ -19,7 +20,7 @@ import { Questionnaire } from './feature/questionnaires/questionnaire.entity';
       username: 'postgres',
       password: 'postgres',
       database: 'ancar',
-      models: [User, Questionnaire],
+      models: [User, Questionnaire, Question],
       define: {
         timestamps: false,
       },

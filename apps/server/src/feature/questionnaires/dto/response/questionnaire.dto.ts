@@ -1,6 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsString, IsDate, IsUUID } from 'class-validator';
-import { Questionnaire } from '../../questionnaire.entity';
+import { Questionnaire } from '../../entity/questionnaire.entity';
 
 export class QuestionnaireResponseDto {
   name: string;

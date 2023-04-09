@@ -7,10 +7,11 @@ import {
   ForeignKey,
   BelongsTo,
   Model,
+  HasMany,
 } from 'sequelize-typescript';
-import { User } from '../users/user.entity';
-import { UUID } from 'sequelize';
+import { User } from '../../users/user.entity';
 import { IsUUID } from 'class-validator';
+import { Question } from './question.entity';
 
 @Table({
   tableName: 'questionnaires',
@@ -37,4 +38,7 @@ export class Questionnaire extends Model {
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasMany(() => Question)
+  questions: Question[];
 }
