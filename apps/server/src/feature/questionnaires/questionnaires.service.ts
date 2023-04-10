@@ -5,12 +5,19 @@ import { UsersService } from '../users/users.service';
 import { Question } from './entity/question.entity';
 import { QuestionnaireResponseDto } from './dto/response/questionnaire.dto';
 import { QuestionnaireRequestUpdateDto } from './dto/request/questionnaire.update.dto';
+import { Answer } from './entity/answer.entity';
+import { AnswerRequestDto } from './dto/request/answer.dto';
+import { QuestionnaireUser } from './entity/questionnaire.user.entity';
 
 @Injectable()
 export class QuestionnairesService {
   constructor(
     @Inject('QUESTIONNAIRE_REPOSITORY')
     private questionnaireRepository: typeof Questionnaire,
+    @Inject('ANSWER_REPOSITORY')
+    private answerRepository: typeof Answer,
+    @Inject('QUESTIONNAIRE_USER_REPOSITORY')
+    private questionnaireUserRepository: typeof QuestionnaireUser,
     @Inject('QUESTION_REPOSITORY')
     private questionRepository: typeof Question,
     private usersService: UsersService,
@@ -85,6 +92,8 @@ export class QuestionnairesService {
     questionnaireRequestDto: QuestionnaireRequestDto,
     current_user_id: string,
   ): Promise<void> {
+    const transaction =
+      await this.questionnaireRepository.sequelize.transaction();
     try {
       const user = await this.usersService.findOne(
         questionnaireRequestDto.creator_user_id,
@@ -101,8 +110,26 @@ export class QuestionnairesService {
       );
       questionnaire.user = user;
       await questionnaire.save();
+      transaction.commit();
     } catch (error) {
+      transaction.rollback();
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async createAnswers(
+    questionnaireId: string,
+    answers: AnswerRequestDto[],
+    userId: string,
+  ): Promise<void> {
+    await Promise.all(answers.map((answer) => Answer.create({ ...answer })));
+    await this.questionnaireUserRepository.create({
+      questionnaire_id: questionnaireId,
+      user_id: userId,
+    });
+  }
+
+  async getAnswers(questionnaire_id: string) {
+    return this.answerRepository.findAll();
   }
 }

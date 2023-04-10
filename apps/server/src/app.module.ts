@@ -9,6 +9,8 @@ import { ValidationPipe } from './feature/auth/validation.pipe';
 import { QuestionnairesModule } from './feature/questionnaires/questionnaires.module';
 import { Questionnaire } from './feature/questionnaires/entity/questionnaire.entity';
 import { Question } from './feature/questionnaires/entity/question.entity';
+import { Answer } from './feature/questionnaires/entity/answer.entity';
+import { QuestionnaireUser } from './feature/questionnaires/entity/questionnaire.user.entity';
 @Module({
   imports: [
     UsersModule,
@@ -20,7 +22,7 @@ import { Question } from './feature/questionnaires/entity/question.entity';
       username: 'postgres',
       password: 'postgres',
       database: 'ancar',
-      models: [User, Questionnaire, Question],
+      models: [User, Questionnaire, Question, Answer, QuestionnaireUser],
       define: {
         timestamps: false,
       },
