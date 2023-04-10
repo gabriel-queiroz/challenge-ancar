@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import { UsersDto } from './dto/response/users.dto';
 import { UserRequestDto } from './dto/request/user.dto';
 import { UserUpdateRequestDto } from './dto/request/update.dto';
+import { Questionnaire } from '../questionnaires/entity/questionnaire.entity';
 
 @Injectable()
 export class UsersService {
@@ -46,6 +47,7 @@ export class UsersService {
     userUpdateRequestDto: UserUpdateRequestDto,
   ): Promise<void> {
     try {
+      const object = Questionnaire.build({ ...userUpdateRequestDto });
       await this.usersRepository.update(userUpdateRequestDto, {
         where: {
           id,

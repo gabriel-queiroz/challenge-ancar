@@ -4,6 +4,7 @@ import { QuestionnaireRequestDto } from './dto/request/questionnaire.dto';
 import { UsersService } from '../users/users.service';
 import { Question } from './entity/question.entity';
 import { QuestionnaireResponseDto } from './dto/response/questionnaire.dto';
+import { QuestionnaireRequestUpdateDto } from './dto/request/questionnaire.update.dto';
 
 @Injectable()
 export class QuestionnairesService {
@@ -31,6 +32,51 @@ export class QuestionnairesService {
         where: { id },
       });
     } catch (error) {
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async updateById(
+    id: string,
+    questionnaire: QuestionnaireRequestUpdateDto,
+  ): Promise<void> {
+    const transaction =
+      await this.questionnaireRepository.sequelize.transaction();
+    try {
+      const result = await this.questionnaireRepository.findByPk(id);
+      result.questions = questionnaire.questions.map((q) =>
+        Question.build(
+          { id: q.id, description: q.description },
+          {
+            isNewRecord: true,
+          },
+        ),
+      );
+      const questions = questionnaire.questions.map((q) =>
+        Question.build({ ...q }),
+      );
+      const allQuestions = await result.$get('questions');
+      const questionToDelete = allQuestions.filter(
+        (question) =>
+          !questions.find((q) => q.description === question.description),
+      );
+
+      for (const question of questions) {
+        if (!(await result.$has('questions', question))) {
+          await result.$create('question', {
+            description: question.description,
+          });
+        }
+      }
+      await Promise.all(questionToDelete.map((question) => question.destroy()));
+
+      await this.questionnaireRepository.update(questionnaire, {
+        where: { id },
+      });
+      transaction.commit();
+    } catch (error) {
+      transaction.rollback();
+      console.log(error);
       throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

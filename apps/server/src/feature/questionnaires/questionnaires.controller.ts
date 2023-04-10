@@ -5,12 +5,14 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { QuestionnaireRequestDto } from './dto/request/questionnaire.dto';
 import { QuestionnairesService } from './questionnaires.service';
 import { QuestionnaireResponseDto } from './dto/response/questionnaire.dto';
+import { QuestionnaireRequestUpdateDto } from './dto/request/questionnaire.update.dto';
 
 @ApiBearerAuth()
 @ApiTags('questionnaires')
@@ -37,8 +39,17 @@ export class QuestionnairesController {
       console.log(error);
     }
   }
+
+  @Put(':id')
+  deleteById(
+    @Param('id') id: string,
+    @Body() questionnaire: QuestionnaireRequestUpdateDto,
+  ): Promise<void> {
+    return this.questionnairesService.updateById(id, questionnaire);
+  }
+
   @Delete(':id')
-  deleteById(@Param('id') id: string): Promise<void> {
+  updateById(@Param('id') id: string): Promise<void> {
     return this.questionnairesService.deleteById(id);
   }
 }
